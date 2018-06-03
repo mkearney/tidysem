@@ -1,0 +1,81 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
+  eval = TRUE
+)
+options(width = 100)
+polcom <- tidyversity::polcom
+```
+# tidysem <img src="man/figures/logo.png" width="160px" align="right" /> 
+
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+
+🎓 Tidy tools for academics
+
+
+## \*\*\* This package is in very early development. Feedback is encouraged!!! \*\*\*
+
+## Installation
+
+<!-- You can install the released version of tidysem from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("tidysem")
+```
+-->
+
+Install the development version from [Github](https://github.com/mkearney/tidysem) with:
+
+```{r install, eval=FALSE}
+## install devtools if not already
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
+## install tidysem from Github
+devtools::install_github("mkearney/tidysem")
+```
+
+Load the package (it, of course, plays nicely with tidyverse).
+
+```{r library}
+## load tidyverse
+library(tidyverse)
+
+## load tidysem
+library(tidysem)
+```
+
+
+## Latent variable models
+
+### Structural equation modeling (SEM)
+
+Conduct latent variable analysis using structural equation modeling.
+
+```{r sem}
+## mutate data and then specify and estimate model
+sem1 <- polcom %>%
+  mutate(therm_2 = therm_2 / 10, 
+    therm_1 = 10 - therm_1 / 10) %>%
+  tidy_sem_model(news =~ news_1 + news_2 + news_3 + news_4 + news_5 + news_6,
+    ambiv_sexism =~ ambiv_sexism_1 + ambiv_sexism_2 + ambiv_sexism_3 + 
+      ambiv_sexism_4 + ambiv_sexism_5 + ambiv_sexism_6,
+    partisan =~ a*therm_1 + a*therm_2,
+    ambiv_sexism ~ age + sex + hhinc + edu + news + partisan) %>%
+  tidy_sem()
+
+## print model summary
+sem1 %>%
+  tidy_summary()
+```
+
+
