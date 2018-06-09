@@ -8,8 +8,10 @@ fit_lavaan <- function(m) {
   r2 <- lavaan::inspect(m, "rsquare")
   pt <- lavaan::partable(m)
   y <- pt$lhs[pt$op == "~"]
-  r2 <- unique(r2[match(y, names(r2))])
+  r2 <- r2[match(y, names(r2))]
   r2nms <- paste0("R^2:", names(r2))
+  r2 <- r2[!duplicated(r2nms)]
+  r2nms <- unique(r2nms)
   fit_statistic <- c("chisq", "aic", "bic", "cfi", "tli", "rmsea", "srmr", r2nms)
   p <- rep(NA_real_, length(fit_statistic))
   p[match("chisq", fit_statistic)] <- f[3]

@@ -6,6 +6,8 @@ coef_lavaan <- function(m) {
   m <- m[, c("term", "est", "se", "z", "pvalue",  "std.all")]
   names(m)[4:6] <- c("est.se", "p.value", "std.est")
   m <- add_stars(m)
+  #m <- m[rev(seq_len(nrow(m))), ]
+  #row.names(m) <- NULL
   m[, c("term", "est", "se", "est.se", "p.value", "stars", "std.est")]
 }
 
